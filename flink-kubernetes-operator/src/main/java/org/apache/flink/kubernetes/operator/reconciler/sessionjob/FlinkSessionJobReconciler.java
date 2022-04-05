@@ -106,6 +106,8 @@ public class FlinkSessionJobReconciler implements Reconciler<FlinkSessionJob> {
             throws Exception {
         Optional<FlinkDeployment> flinkDepOptional =
                 OperatorUtils.getSecondaryResource(sessionJob, context, operatorConfiguration);
+        var flinkDepName = sessionJob.getSpec().getClusterId();
+
         if (flinkDepOptional.isPresent()) {
             var flinkdep = flinkDepOptional.get();
             var jobDeploymentStatus = flinkdep.getStatus().getJobManagerDeploymentStatus();
@@ -120,7 +122,7 @@ public class FlinkSessionJobReconciler implements Reconciler<FlinkSessionJob> {
                         jobDeploymentStatus);
             }
         } else {
-            LOG.info("Session cluster deployment is not found");
+            LOG.info("Session cluster deployment {} is not found", flinkDepName);
         }
     }
 }
